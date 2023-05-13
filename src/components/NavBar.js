@@ -1,3 +1,4 @@
+import React from 'react'
 import { UdeaIcon, LogoutIcon } from './Icons'
 import Styles from '@/styles/NavBar.module.css'
 

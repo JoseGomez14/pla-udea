@@ -1,5 +1,5 @@
 import Styles from '@/styles/Input.module.css'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 /**
  * Componente de selección de opciones.
