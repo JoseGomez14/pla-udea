@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React from 'react'
 import Card from './../../components/Card'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 
 afterAll(() => {
   jest.clearAllMocks()
@@ -14,7 +14,8 @@ describe('Pruebas al componente Card', () => {
     content: 'Titulo de tarjeta',
     subContent: 'Subtitulo de tarjeta',
     handleAddCard: jest.fn(),
-    handleDeleteCard: jest.fn()
+    handleDeleteCard: jest.fn(),
+    cardType: '1'
   }
   const testIdAdd = 'add-card-button'
 
@@ -26,75 +27,69 @@ describe('Pruebas al componente Card', () => {
       />
     )
     const addButtonElement = screen.getByTestId(testIdAdd)
+
     // Assert
-    expect(addButtonElement).toBeInTheDocument()
+    expect(screen.getByTestId(testIdAdd)).toBeInTheDocument()
+    expect(addButtonElement).toHaveAttribute('title', 'Agregar ' + valoresIniciales.cardType)
   })
 
-  // test('Debe renderizar el componente correctamente con add button', () => {
-  //   const handleDeleteCard = jest.fn()
+  test('Llamar a handleAddCard cuando se hace click sobre el botón Agregar', () => {
+    // Act
+    render(
+      <Card
+        {...valoresIniciales}
+        handleDeleteCard={jest.fn()}
+      />
+    )
+    const addButton = screen.getByTestId(testIdAdd)
+    fireEvent.click(addButton)
 
+    // Assert
+    expect(valoresIniciales.handleAddCard).toHaveBeenCalledTimes(1)
+    expect(valoresIniciales.handleDeleteCard).toHaveBeenCalledTimes(0)
+  })
+
+  // test('Llamar a handleDeleteCard cuando se hace click sobre el botón Eliminar', () => {
+  //   // Act
   //   render(
   //     <Card
-  //       id={id}
-  //       content={content}
-  //       subContent={subContent}
-  //       handleDeleteCard={handleDeleteCard}
+  //       {...valoresIniciales}
   //     />
   //   )
+  //   const deleteButton = screen.getByTestId(testIdDelete)
+  //   fireEvent.click(deleteButton)
 
-  //   const titleElement = screen.getByText(content)
-  //   const subTitleElement = screen.getByText(subContent)
-  //   const addButtonElement = screen.queryByTitle(/Agregar/)
-  //   const deleteButtonElement = screen.getByTitle(/Eliminar/)
+  //   // Assert
+  //   expect(valoresIniciales.handleDeleteCard).toHaveBeenCalledTimes(1)
+  //   expect(valoresIniciales.handleAddCard).toHaveBeenCalledTimes(0)
+  // });
 
-  //   expect(titleElement).toBeInTheDocument()
-  //   expect(subTitleElement).toBeInTheDocument()
-  //   expect(addButtonElement).not.toBeInTheDocument()
-  //   expect(deleteButtonElement).toBeInTheDocument()
-  //   expect(handleDeleteCard).toHaveBeenCalledTimes(0)
-  // })
+  test('renders link with URL', () => {
+    // Arrange
+    const props = {
+      content: 'Example',
+      subContent: 'An example website',
+      id: '/example'
+    }
 
-  // it('calls handleAddCard when add button is clicked', () => {
-  //   const handleAddCard = jest.fn()
-  //   const handleDeleteCard = jest.fn()
-  //   const cardType = 'mi-tipo-de-tarjeta'
+    // Act
+    render(<Card {...props} />)
+    // Assert
+    const linkElement = screen.getByRole('link')
+    expect(linkElement).toHaveAttribute('href', props.id)
+  })
 
-  //   render(
-  //     <Card
-  //       id={id}
-  //       content={content}
-  //       subContent={subContent}
-  //       handleAddCard={handleAddCard}
-  //       handleDeleteCard={handleDeleteCard}
-  //       cardType={cardType}
-  //     />
-  //   )
-
-  //   const addButton = screen.getByTestId('add-card-button')
-  //   addButton.click()
-
-  //   expect(handleAddCard).toHaveBeenCalledTimes(1)
-  //   expect(handleDeleteCard).toHaveBeenCalledTimes(0)
-  // })
-
-  // it('calls handleDeleteCard when delete button is clicked', () => {
-  //   const handleAddCard = jest.fn()
-  //   const handleDeleteCard = jest.fn()
-
-  //   render(
-  //     <Card
-  //       id={id}
-  //       content={content}
-  //       subContent={subContent}
-  //       handleAddCard={handleAddCard}
-  //       handleDeleteCard={handleDeleteCard}
-  //     />
-  //   )
-
-  //   const deleteButton = screen.getByTestId('delete-card-button')
-  //   deleteButton.click()
-
-  //   expect(handleAddCard).toHaveBeenCalledTimes(0)
-  //   expect(handleDeleteCard).toHaveBeenCalledTimes(1)
-  // })
+  test('Renderiza el link con el enlace correspondiente', () => {
+    // Arrange
+    const props = {
+      content: 'Example',
+      subContent: 'An example website',
+      id: '/example'
+    }
+    // Act
+    render(<Card {...props} />)
+    // Assert
+    const linkElement = screen.getByRole('link')
+    expect(linkElement).toHaveAttribute('href', props.id)
+  })
 })
