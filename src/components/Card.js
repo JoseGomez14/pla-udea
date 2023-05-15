@@ -32,6 +32,7 @@ export default function Card({
           className={Styles.addButton}
           title={`Agregar ${props.cardType || ''}`}
           onClick={handleAddCard}
+          name={props.name}
         >
           <PlusIcon color="white" height="4rem" width="4rem" />
         </button>
